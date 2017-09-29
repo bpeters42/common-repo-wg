@@ -1,0 +1,200 @@
+swagger: '2.0'
+info:
+  title: AIRR Common Repository API
+  version: 1.0.0
+  contact:
+    name: AIRR Community
+    url: 'http://www.airr-community.org/'
+    email: airr@airr
+  description: >
+    Documentation of the Adaptive Immune Receptor Repertoire (AIRR) common
+    repository web service application programming interface (API).
+basePath: /airr/v1
+schemes:
+  - https
+produces:
+  - application/json
+tags:
+  - name: info
+    description: Service information
+  - name: studies
+    description: Queries for studies
+  - name: subjects
+    description: Queries for subjects
+  - name: diagnoses
+    description: Queries for diagnoses
+  - name: cell_processing
+    description: Queries for cell processing
+  - name: nucleic_acid_processing
+    description: Queries for nucleic acid processing
+  - name: samples
+    description: Queries for samples
+  - name: rearrangements
+    description: Queries for rearrangements
+paths:
+  /:
+    x-swagger-router-controller: status
+    get:
+      description: |
+        Service heartbeat.
+      operationId: getStatus
+      responses:
+        '200':
+          description: |
+            Success.
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
+  /info:
+    x-swagger-router-controller: status
+    get:
+      description: |
+        Service information.
+      tags:
+        - info
+      operationId: getInfo
+      responses:
+        '200':
+          description: |
+            Success.
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              version:
+                type: string
+  /swagger:
+    x-swagger-pipe: swagger_raw
+  '/study/{study_id}':
+    x-swagger-router-controller: studies
+    get:
+      description: |
+        This service returns study data.
+      tags:
+        - studies
+      parameters:
+        - name: study_id
+          in: path
+          description: |
+            Unique identifier for study record.
+          required: true
+          type: string
+      operationId: getStudy
+      responses:
+        '200':
+          description: |
+            A successful call returns the study data. 
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/airr-community/airr-standards/master/specs/definitions.yaml#/Study
+        '400':
+          description: malformed request
+        '401':
+          description: authentication error
+        '403':
+          description: authorization error
+        '404':
+          description: data not found
+        '405':
+          description: method not allowed
+  /study:
+    x-swagger-router-controller: studies
+    get:
+      description: |
+        This service provides querying on studies.
+      tags:
+        - studies
+      parameters:
+        - name: query
+          in: query
+          description: Query string for studies.
+          required: false
+          type: string
+      operationId: queryStudy
+      responses:
+        '200':
+          description: |
+            A successful call returns an array of study data. 
+          schema:
+            type: array
+            items:
+              $ref: >-
+                https://raw.githubusercontent.com/airr-community/airr-standards/master/specs/definitions.yaml#/Study
+        '400':
+          description: malformed request
+        '401':
+          description: authentication error
+        '403':
+          description: authorization error
+        '404':
+          description: data not found
+        '405':
+          description: method not allowed
+  '/sample/{sample_id}':
+    x-swagger-router-controller: samples
+    get:
+      description: |
+        This service returns sample data.
+      tags:
+        - samples
+      parameters:
+        - name: sample_id
+          in: path
+          description: |
+            Unique identifier for sample record.
+          required: true
+          type: string
+      operationId: getSample
+      responses:
+        '200':
+          description: |
+            A successful call returns the sample data. 
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/airr-community/airr-standards/master/specs/definitions.yaml#/Sample
+        '400':
+          description: malformed request
+        '401':
+          description: authentication error
+        '403':
+          description: authorization error
+        '404':
+          description: data not found
+        '405':
+          description: method not allowed
+  /sample:
+    x-swagger-router-controller: samples
+    get:
+      description: |
+        This service provides querying on samples.
+      tags:
+        - samples
+      parameters:
+        - name: query
+          in: query
+          description: Query string for samples.
+          required: false
+          type: string
+      operationId: querySample
+      responses:
+        '200':
+          description: |
+            A successful call returns an array of sample data. 
+          schema:
+            type: array
+            items:
+              $ref: >-
+                https://raw.githubusercontent.com/airr-community/airr-standards/master/specs/definitions.yaml#/Sample
+        '400':
+          description: malformed request
+        '401':
+          description: authentication error
+        '403':
+          description: authorization error
+        '404':
+          description: data not found
+        '405':
+          description: method not allowed
